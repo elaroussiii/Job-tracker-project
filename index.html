@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <body>
+    <script>
+      // Vérifie si l'utilisateur est connecté
+      if (!localStorage.getItem('isLoggedIn')) {
+        window.location.href = 'auth.html'; // Redirige vers la page d'authentification
+      }
+
+      // Optionnel: Récupère l'email de l'utilisateur pour l'afficher
+      document.addEventListener('DOMContentLoaded', () => {
+        const userAvatar = document.querySelector('.user-avatar');
+        const userEmail = localStorage.getItem('userEmail');
+        if (userAvatar && userEmail) {
+          userAvatar.textContent = userEmail.charAt(0).toUpperCase(); // Affiche la première lettre de l'email
+          userAvatar.title = userEmail; // Affiche l'email complet au survol
+        }
+      });
+    </script>
+    <!-- Le reste de ton code HTML pour la navbar, le container, etc. -->
+    
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="logo">
+        <img src="pictures/logo.png" alt="Job Tracker" class="logo-icon" />
+        <h1>Job Tracker</h1>
+      </div>
+      <div class="user-profile">
+        <div class="user-avatar">JD</div>
+      </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Control Bar -->
+      <div class="control-bar">
+        <button class="btn-add" id="addApplicationBtn">
+          <span>➕</span>
+          Add Application
+        </button>
+        <div class="filter-group">
+          <span class="filter-label">Filter by Status:</span>
+          <select class="filter-select" id="statusFilter">
+            <option value="all">All Applications</option>
+            <option value="sent">Sent</option>
+            <option value="interview">Interview</option>
+            <option value="rejected">Rejected</option>
+            <option value="accepted">Accepted</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card stat-sent">
+          <div class="stat-number" id="statSent">8</div>
+          <div class="stat-label">Applications Sent</div>
+        </div>
+        <div class="stat-card stat-interview">
+          <div class="stat-number" id="statInterview">3</div>
+          <div class="stat-label">Interviews Scheduled</div>
+        </div>
+        <div class="stat-card stat-rejected">
+          <div class="stat-number" id="statRejected">2</div>
+          <div class="stat-label">Rejected</div>
+        </div>
+        <div class="stat-card stat-accepted">
+          <div class="stat-number" id="statAccepted">1</div>
+          <div class="stat-label">Accepted</div>
+        </div>
+      </div>
+
+      <!-- Applications Grid -->
+      <div class="applications-grid" id="applicationsGrid">
+        <!-- Cards are rendered dynamically in script.js -->
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Add New Application</h2>
+          <button class="close-btn" id="closeModalBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="applicationForm">
+            <div class="form-group">
+              <label for="companyInput">Company Name *</label>
+              <input
+                id="companyInput"
+                type="text"
+                placeholder="e.g., Google"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="positionInput">Position *</label>
+              <input
+                id="positionInput"
+                type="text"
+                placeholder="e.g., Software Engineer"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="contractInput">Contract Type *</label>
+              <select id="contractInput" required>
+                <option value="">Select...</option>
+                <option value="Internship">Internship</option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
+                <option value="Freelance">Freelance</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="statusInput">Status *</label>
+              <select id="statusInput" required>
+                <option value="sent">Sent</option>
+                <option value="interview">Interview</option>
+                <option value="rejected">Rejected</option>
+                <option value="accepted">Accepted</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="applyDateInput">Apply Date *</label>
+              <input id="applyDateInput" type="date" required />
+            </div>
+            <div class="form-group">
+              <label for="interviewDateInput">Interview Date</label>
+              <input id="interviewDateInput" type="date" />
+            </div>
+            <div class="form-group">
+              <label for="offerLinkInput">Offer Link</label>
+              <input id="offerLinkInput" type="url" placeholder="https://..." />
+            </div>
+            <div class="form-group">
+              <label for="notesInput">Notes</label>
+              <textarea
+                id="notesInput"
+                rows="4"
+                placeholder="Add any notes..."
+              ></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-cancel" id="cancelModalBtn">
+                Cancel
+              </button>
+              <button type="submit" class="btn-submit">Save Application</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

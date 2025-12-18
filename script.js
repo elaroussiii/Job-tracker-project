@@ -1,23 +1,30 @@
-// ==== CONFIGURATION ====
+// URL de l'API MockAPI pour gérer les candidatures
 const API_URL = "https://69428fb069b12460f311dc56.mockapi.io/applications";
 
 // ==== STATE ====
+// Tableau contenant toutes les candidatures chargées depuis l'API
 let applications = [];
+// Filtre actuel pour afficher les candidatures (par défaut : toutes)
 let currentFilter = "all";
+// ID de la candidature en cours d'édition (null si création)
 let editingId = null;
 
 // ==== DOM ELEMENTS ====
+// Conteneur principal où les cartes de candidatures sont affichées
 const applicationsGrid = document.getElementById("applicationsGrid");
+// Menu déroulant pour filtrer les candidatures par statut
 const statusFilter = document.getElementById("statusFilter");
+// Bouton pour ouvrir le modal d'ajout de candidature
 const addApplicationBtn = document.getElementById("addApplicationBtn");
 
+// Éléments du modal (fenêtre popup)
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const cancelModalBtn = document.getElementById("cancelModalBtn");
 const applicationForm = document.getElementById("applicationForm");
 
-// Form inputs
+// Champs du formulaire de candidature
 const companyInput = document.getElementById("companyInput");
 const positionInput = document.getElementById("positionInput");
 const contractInput = document.getElementById("contractInput");
@@ -27,7 +34,7 @@ const interviewDateInput = document.getElementById("interviewDateInput");
 const offerLinkInput = document.getElementById("offerLinkInput");
 const notesInput = document.getElementById("notesInput");
 
-// Stats
+// Éléments d'affichage des statistiques
 const statSent = document.getElementById("statSent");
 const statInterview = document.getElementById("statInterview");
 const statRejected = document.getElementById("statRejected");
@@ -35,6 +42,7 @@ const statAccepted = document.getElementById("statAccepted");
 
 // ==== API FUNCTIONS ====
 
+// Charge toutes les candidatures depuis l'API et les affiche
 async function loadApplications() {
   try {
     showLoading(true);
@@ -54,6 +62,7 @@ async function loadApplications() {
   }
 }
 
+// Crée une nouvelle candidature via l'API
 async function createApplication(data) {
   try {
     showLoading(true);
@@ -81,6 +90,7 @@ async function createApplication(data) {
   }
 }
 
+// Met à jour une candidature existante via l'API
 async function updateApplication(id, data) {
   try {
     showLoading(true);
@@ -108,6 +118,7 @@ async function updateApplication(id, data) {
   }
 }
 
+// Supprime une candidature après confirmation de l'utilisateur
 async function deleteApplication(id) {
   if (!confirm("Are you sure you want to delete this application?")) {
     return;
@@ -135,8 +146,10 @@ async function deleteApplication(id) {
 
 // ==== MODAL FUNCTIONS ====
 
+// Ouvre le modal en mode création ou édition
 function openModal(isEdit = false, app = null) {
   if (isEdit && app) {
+    // Mode édition : pré-remplit le formulaire avec les données existantes
     modalTitle.textContent = "Edit Application";
     editingId = app.id;
 
@@ -149,6 +162,7 @@ function openModal(isEdit = false, app = null) {
     offerLinkInput.value = app.offerLink || "";
     notesInput.value = app.notes || "";
   } else {
+    // Mode création : réinitialise le formulaire avec la date du jour
     modalTitle.textContent = "Add New Application";
     editingId = null;
     applicationForm.reset();
@@ -158,6 +172,7 @@ function openModal(isEdit = false, app = null) {
   modal.classList.add("active");
 }
 
+// Ferme le modal et réinitialise le formulaire
 function closeModal() {
   modal.classList.remove("active");
   applicationForm.reset();
@@ -166,6 +181,7 @@ function closeModal() {
 
 // ==== RENDER FUNCTIONS ====
 
+// Affiche les candidatures filtrées sous forme de cartes
 function renderApplications() {
   const list = applications.filter((app) => {
     return currentFilter === "all" || app.status === currentFilter;
@@ -173,6 +189,7 @@ function renderApplications() {
 
   applicationsGrid.innerHTML = "";
 
+  // Si aucune candidature ne correspond au filtre
   if (list.length === 0) {
     applicationsGrid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: white; font-size: 18px;">
@@ -183,6 +200,7 @@ function renderApplications() {
     return;
   }
 
+  // Génère une carte pour chaque candidature
   list.forEach((app) => {
     const card = document.createElement("div");
     card.className = "app-card";
@@ -252,6 +270,7 @@ function renderApplications() {
       </div>
     `;
 
+    // Attache les événements aux boutons d'édition et de suppression
     const editBtn = card.querySelector(".btn-edit");
     const deleteBtn = card.querySelector(".btn-delete");
 
@@ -264,6 +283,7 @@ function renderApplications() {
   updateStats();
 }
 
+// Met à jour les compteurs de statistiques selon les statuts
 function updateStats() {
   statSent.textContent = applications.filter((a) => a.status === "sent").length;
   statInterview.textContent = applications.filter(
@@ -279,6 +299,7 @@ function updateStats() {
 
 // ==== UTILITY FUNCTIONS ====
 
+// Affiche ou masque l'indicateur de chargement
 function showLoading(show) {
   if (show) {
     applicationsGrid.style.opacity = "0.5";
@@ -289,6 +310,7 @@ function showLoading(show) {
   }
 }
 
+// Formate une date au format "DD MMM YYYY"
 function formatDate(dateString) {
   if (!dateString) return "";
   const d = new Date(dateString);
@@ -299,11 +321,13 @@ function formatDate(dateString) {
   });
 }
 
+// Met en majuscule la première lettre d'une chaîne
 function capitalize(str) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// Échappe les caractères HTML pour éviter les injections XSS
 function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
@@ -312,32 +336,33 @@ function escapeHtml(text) {
 
 // ==== EVENT LISTENERS ====
 
+// Initialisation au chargement de la page
 document.addEventListener("DOMContentLoaded", () => {
-  // Set default apply date
+  // Définit la date du jour par défaut dans le champ de date de candidature
   applyDateInput.value = new Date().toISOString().split("T")[0];
 
-  // Load applications from API on page load
+  // Charge les candidatures depuis l'API
   loadApplications();
 
-  // Add application button
+  // Ouvre le modal pour ajouter une nouvelle candidature
   addApplicationBtn.addEventListener("click", () => openModal(false));
 
-  // Close modal buttons
+  // Ferme le modal via les boutons de fermeture
   closeModalBtn.addEventListener("click", closeModal);
   cancelModalBtn.addEventListener("click", closeModal);
 
-  // Close modal on outside click
+  // Ferme le modal si l'utilisateur clique en dehors de la fenêtre
   modal.addEventListener("click", (e) => {
     if (e.target === modal) closeModal();
   });
 
-  // Filter change
+  // Applique le filtre sélectionné et réaffiche les candidatures
   statusFilter.addEventListener("change", (e) => {
     currentFilter = e.target.value;
     renderApplications();
   });
 
-  // Form submit
+  // Gère la soumission du formulaire (création ou mise à jour)
   applicationForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -359,7 +384,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Déconnexion au clic sur l'avatar
+  // Déconnexion au clic sur l'avatar utilisateur
   const userAvatar = document.querySelector(".user-avatar");
   if (userAvatar) {
     userAvatar.addEventListener("click", logout);
@@ -367,7 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Fonction de déconnexion
+// Déconnecte l'utilisateur et le redirige vers la page d'authentification
 function logout() {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userEmail");
@@ -378,14 +403,17 @@ function logout() {
 // ADZUNA JOB SEARCH
 // =====================
 
+// Éléments du formulaire de recherche d'emplois
 const searchWhatInput = document.getElementById("searchWhat");
 const searchWhereInput = document.getElementById("searchWhere");
 const searchContractInput = document.getElementById("searchContract");
 const searchJobsBtn = document.getElementById("searchJobsBtn");
 const jobResultsContainer = document.getElementById("jobResults");
 
+// URL de l'API backend pour rechercher des offres d'emploi via Adzuna
 const JOB_SEARCH_API = "http://localhost:3001/api/jobs/search";
 
+// Affiche les résultats de recherche d'emplois sous forme de cartes
 function renderJobResults(jobs) {
   jobResultsContainer.innerHTML = "";
 
@@ -424,13 +452,14 @@ function renderJobResults(jobs) {
       </div>
     `;
 
+    // Bouton pour importer l'offre dans le tracker de candidatures
     const importBtn = card.querySelector(".btn-import");
     importBtn.addEventListener("click", () => {
-      // Pré-remplir le formulaire d'application
+      // Pré-remplit le formulaire avec les données de l'offre
       companyInput.value = company;
       positionInput.value = title;
 
-      // Mapping très simple pour contractType
+      // Convertit le type de contrat Adzuna vers les valeurs du formulaire
       if (contract === "intern" || contract === "internship") {
         contractInput.value = "Internship";
       } else if (contract === "permanent") {
@@ -445,13 +474,14 @@ function renderJobResults(jobs) {
       statusInput.value = "sent";
       applyDateInput.value = new Date().toISOString().split("T")[0];
 
-      openModal(false); // on ouvre le modal en mode "nouvelle candidature"
+      openModal(false);
     });
 
     jobResultsContainer.appendChild(card);
   });
 }
 
+// Effectue une recherche d'emplois via l'API backend
 async function searchJobs() {
   const what = searchWhatInput.value.trim() || "developer";
   const where = searchWhereInput.value.trim() || "Paris";
@@ -479,6 +509,7 @@ async function searchJobs() {
   }
 }
 
+// Lance la recherche d'emplois au clic sur le bouton
 if (searchJobsBtn) {
   searchJobsBtn.addEventListener("click", searchJobs);
 }

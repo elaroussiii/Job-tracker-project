@@ -4,15 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Job Tracker - Login / Sign Up</title>
+
+    <!-- Style général commun à toute l'application -->
     <link rel="stylesheet" href="style.css" />
-    <!-- Utilise le même style.css pour la cohérence -->
+
+    <!-- Style spécifique aux pages d'authentification (login / signup) -->
     <link rel="stylesheet" href="auth.css" />
-    <!-- CSS spécifique à l'authentification -->
+
+    <!-- Icône de l’onglet du navigateur -->
     <link rel="icon" type="/png" href="logo.png" />
   </head>
   <body>
+    <!-- Conteneur principal centré pour le bloc d’authentification -->
     <div class="auth-container">
       <div class="auth-card">
+        <!-- En-tête de la carte : logo + titre dynamique (Login / Sign Up) -->
         <div class="auth-header">
           <div class="logo">
             <img
@@ -25,8 +31,9 @@
           <h2 id="authTitle">Login</h2>
         </div>
 
+        <!-- Corps de la carte : contient les deux formulaires (login + signup) -->
         <div class="auth-body">
-          <!-- Login Form -->
+          <!-- Formulaire de connexion (affiché par défaut) -->
           <form id="loginForm" class="auth-form active">
             <div class="form-group">
               <label for="loginEmail">Email</label>
@@ -53,7 +60,7 @@
             </p>
           </form>
 
-          <!-- Sign Up Form -->
+          <!-- Formulaire d’inscription (caché au départ, activé via JS) -->
           <form id="signupForm" class="auth-form">
             <div class="form-group">
               <label for="signupEmail">Email</label>
@@ -92,6 +99,7 @@
       </div>
     </div>
 
+    <!-- Script gérant la logique d’authentification (toggle login/signup, stockage, redirection, etc.) -->
     <script src="auth.js"></script>
   </body>
 </html>

@@ -7,24 +7,28 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Script de vérification d'authentification et affichage de l'avatar utilisateur -->
     <script>
-      // Vérifie si l'utilisateur est connecté
+      // Si l'utilisateur n'est pas marqué comme connecté dans le localStorage,
+      // on le redirige vers la page d'authentification.
       if (!localStorage.getItem("isLoggedIn")) {
-        window.location.href = "auth.html"; // Redirige vers la page d'authentification
+        window.location.href = "auth.html";
       }
 
-      // Optionnel: Récupère l'email de l'utilisateur pour l'afficher
+      // Après le chargement du DOM, on met à jour l'avatar avec l'email stocké
+      // dans le localStorage (initiale dans l'avatar + email complet en infobulle).
       document.addEventListener("DOMContentLoaded", () => {
         const userAvatar = document.querySelector(".user-avatar");
         const userEmail = localStorage.getItem("userEmail");
+
         if (userAvatar && userEmail) {
-          userAvatar.textContent = userEmail.charAt(0).toUpperCase(); // Affiche la première lettre de l'email
-          userAvatar.title = userEmail; // Affiche l'email complet au survol
+          userAvatar.textContent = userEmail.charAt(0).toUpperCase();
+          userAvatar.title = userEmail;
         }
       });
     </script>
 
-    <!-- Navigation Bar -->
+    <!-- Barre de navigation supérieure avec logo de l'application et avatar utilisateur -->
     <nav class="navbar">
       <div class="logo">
         <img src="pictures/logo.png" alt="Job Tracker" class="logo-icon" />
@@ -35,9 +39,9 @@
       </div>
     </nav>
 
-    <!-- Main Container -->
+    <!-- Conteneur principal de la page -->
     <div class="container">
-      <!-- Control Bar -->
+      <!-- Barre de contrôle : ajout d’une candidature et filtrage par statut -->
       <div class="control-bar">
         <button class="btn-add" id="addApplicationBtn">
           <span>➕</span>
@@ -55,7 +59,7 @@
         </div>
       </div>
 
-      <!-- 🔍 Job Search Bar (Adzuna) -->
+      <!-- Section de recherche d’offres d’emploi via l’API Adzuna -->
       <div class="job-search-bar">
         <h2>Search Jobs (Adzuna)</h2>
         <div class="job-search-fields">
@@ -80,16 +84,15 @@
         </div>
       </div>
 
-      <!-- Job Search Results -->
+      <!-- Section d’affichage des résultats de la recherche d’emplois -->
       <div class="job-results-container">
         <h3>Job Results</h3>
         <div id="jobResults" class="job-results-grid">
-          <!-- Job offers from Adzuna will be rendered here -->
+          <!-- Les offres retournées par Adzuna seront injectées ici en JavaScript -->
         </div>
       </div>
 
-      <!-- Stats Grid -->
-
+      <!-- Zone de statistiques globales sur les candidatures -->
       <div class="stats-grid">
         <div class="stat-card stat-sent">
           <div class="stat-number" id="statSent">8</div>
@@ -109,13 +112,11 @@
         </div>
       </div>
 
-      <!-- Applications Grid -->
-      <div class="applications-grid" id="applicationsGrid">
-        <!-- Cards are rendered dynamically in script.js -->
-      </div>
+      <!-- Grille des candidatures : cartes générées dynamiquement par script.js -->
+      <div class="applications-grid" id="applicationsGrid"></div>
     </div>
 
-    <!-- Modal -->
+    <!-- Fenêtre modale pour ajouter ou éditer une candidature -->
     <div class="modal" id="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -123,6 +124,7 @@
           <button class="close-btn" id="closeModalBtn">&times;</button>
         </div>
         <div class="modal-body">
+          <!-- Formulaire de saisie des informations de candidature -->
           <form id="applicationForm">
             <div class="form-group">
               <label for="companyInput">Company Name *</label>
@@ -191,6 +193,7 @@
       </div>
     </div>
 
+    <!-- Script principal gérant la logique de l’application (candidatures, recherche, etc.) -->
     <script src="script.js"></script>
   </body>
 </html>

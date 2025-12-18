@@ -1,25 +1,36 @@
+// Charge les variables d'environnement à partir du fichier .env
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const fetch = require("node-fetch"); // si tu as Node < 18, sinon tu peux enlever et utiliser global fetch
+const fetch = require("node-fetch"); // Pour Node < 18 : apporte la fonction fetch côté serveur
 
 const app = express();
 const port = process.env.PORT || 3001;
 
+// Identifiants de l'API Adzuna récupérés depuis les variables d'environnement
 const ADZUNA_APP_ID = process.env.ADZUNA_APP_ID;
 const ADZUNA_APP_KEY = process.env.ADZUNA_APP_KEY;
 
+// Middlewares globaux : CORS pour accepter les requêtes cross-origin,
+// et parsing automatique du JSON reçu dans le body des requêtes.
 app.use(cors());
 app.use(express.json());
 
-// 🔍 Route de recherche d'offres via Adzuna
+// Route simple pour vérifier que le backend fonctionne
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Backend running without OpenAI" });
+});
+
+// Route pour rechercher des offres d'emploi via l'API Adzuna
 app.get("/api/jobs/search", async (req, res) => {
   try {
+    // Récupération des paramètres de recherche envoyés par le frontend, avec valeurs par défaut
     const { what = "developer", where = "Paris", contract = "" } = req.query;
 
-    // Pays "fr" pour France, tu peux changer ensuite
+    // Base de l'URL Adzuna (ici pour la France : 'fr')
     const baseUrl = `https://api.adzuna.com/v1/api/jobs/fr/search/1`;
 
+    // Construction de l'URL complète avec les paramètres obligatoires + filtres
     const url =
       `${baseUrl}?app_id=${ADZUNA_APP_ID}` +
       `&app_key=${ADZUNA_APP_KEY}` +
@@ -29,6 +40,7 @@ app.get("/api/jobs/search", async (req, res) => {
       `&content-type=application/json` +
       (contract ? `&contract=${encodeURIComponent(contract)}` : "");
 
+    // Appel HTTP vers l'API Adzuna
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
@@ -36,9 +48,10 @@ app.get("/api/jobs/search", async (req, res) => {
       );
     }
 
+    // Réponse JSON d'Adzuna (liste d'offres d'emploi et métadonnées)
     const data = await response.json();
 
-    // On renvoie directement ce que donne Adzuna pour le moment
+    // Renvoi tel quel au frontend pour affichage
     res.json(data);
   } catch (err) {
     console.error("Error fetching jobs from Adzuna:", err.message);
@@ -46,6 +59,7 @@ app.get("/api/jobs/search", async (req, res) => {
   }
 });
 
+// Démarrage du serveur Express sur le port configuré
 app.listen(port, () => {
   console.log(`Backend running on http://localhost:${port}`);
 });

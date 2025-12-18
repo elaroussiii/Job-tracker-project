@@ -3,7 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const fetch = require("node-fetch"); // Pour Node < 18 : apporte la fonction fetch côté serveur
-
+//  Importation des routes utilisateurs
+const usersRouter = require("./routes/users");
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -15,11 +16,7 @@ const ADZUNA_APP_KEY = process.env.ADZUNA_APP_KEY;
 // et parsing automatique du JSON reçu dans le body des requêtes.
 app.use(cors());
 app.use(express.json());
-
-// Route simple pour vérifier que le backend fonctionne
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Backend running without OpenAI" });
-});
+app.use("/api/users", usersRouter);
 
 // Route pour rechercher des offres d'emploi via l'API Adzuna
 app.get("/api/jobs/search", async (req, res) => {
@@ -57,6 +54,12 @@ app.get("/api/jobs/search", async (req, res) => {
     console.error("Error fetching jobs from Adzuna:", err.message);
     res.status(500).json({ error: "Error fetching jobs from Adzuna" });
   }
+});
+
+// Gestion d'erreurs
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  res.status(500).json({ error: "Internal server error" });
 });
 
 // Démarrage du serveur Express sur le port configuré

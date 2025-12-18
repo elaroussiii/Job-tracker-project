@@ -1,5 +1,6 @@
 // URL de l'API MockAPI pour gérer les utilisateurs (email + mot de passe)
-const USERS_API_URL = "https://69428fb069b12460f311dc56.mockapi.io/users";
+// const USERS_API_URL = "https://69428fb069b12460f311dc56.mockapi.io/users";
+const USERS_API_URL = "http://localhost:3001/api/users";
 // URL de redirection après connexion réussie
 const DASHBOARD_URL = "index.html";
 
@@ -51,26 +52,27 @@ async function handleLogin(event) {
   }
 
   try {
-    // Récupère tous les utilisateurs depuis l'API
-    const response = await fetch(USERS_API_URL);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const users = await response.json();
+    // Envoie une requête POST au backend pour le login
+    const response = await fetch("http://localhost:3001/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    // Recherche un utilisateur correspondant à l'email et au mot de passe
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
+    const data = await response.json();
 
-    if (user) {
-      // Stocke l'état de connexion et l'email dans le localStorage
+    if (response.ok) {
+      // Login réussi
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userEmail", user.email);
+      localStorage.setItem("userEmail", data.email);
+      localStorage.setItem("userId", data.id);
       // Redirige vers le tableau de bord principal
       window.location.href = DASHBOARD_URL;
     } else {
-      alert("Invalid email or password.");
+      // Login échoué
+      alert(data.error || "Invalid email or password.");
     }
   } catch (error) {
     console.error("Login error:", error);
@@ -99,37 +101,26 @@ async function handleSignup(event) {
   }
 
   try {
-    // Récupère tous les utilisateurs pour vérifier si l'email existe déjà
-    const response = await fetch(USERS_API_URL);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const users = await response.json();
-
-    // Vérifie si un utilisateur avec cet email existe déjà
-    if (users.some((u) => u.email === email)) {
-      alert("An account with this email already exists. Please login.");
-      return;
-    }
-
-    // Crée un nouvel utilisateur via l'API
-    const newUser = { email, password };
-    const createResponse = await fetch(USERS_API_URL, {
+    // Envoie une requête POST au backend pour créer un compte
+    const response = await fetch("http://localhost:3001/api/users/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newUser),
+      body: JSON.stringify({ email, password }),
     });
 
-    if (!createResponse.ok) {
-      throw new Error(`HTTP error! status: ${createResponse.status}`);
-    }
+    const data = await response.json();
 
-    // Inscription réussie : bascule vers le formulaire de connexion
-    alert("Account created successfully! Please login.");
-    showLoginForm();
-    loginEmailInput.value = email; // Pré-remplit l'email pour faciliter la connexion
+    if (response.ok) {
+      // Inscription réussie : bascule vers le formulaire de connexion
+      alert("Account created successfully! Please login.");
+      showLoginForm();
+      loginEmailInput.value = email; // Pré-remplit l'email pour faciliter la connexion
+    } else {
+      // Inscription échouée
+      alert(data.error || "Signup failed. Please try again.");
+    }
   } catch (error) {
     console.error("Signup error:", error);
     alert("Signup failed. Please try again later.");

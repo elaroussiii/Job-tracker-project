@@ -12,11 +12,6 @@ const ADZUNA_APP_KEY = process.env.ADZUNA_APP_KEY;
 app.use(cors());
 app.use(express.json());
 
-// Route de test
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Backend running without OpenAI" });
-});
-
 // 🔍 Route de recherche d'offres via Adzuna
 app.get("/api/jobs/search", async (req, res) => {
   try {

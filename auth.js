@@ -1,6 +1,6 @@
 // ========== CONFIGURATION ==========
 const USERS_API_URL = "https://69428fb069b12460f311dc56.mockapi.io/users";
-const DASHBOARD_URL = "index.html"; // L'URL de ton tableau de bord
+const DASHBOARD_URL = "index.html"; //  DASHBORARD URL
 
 // ========== DOM ELEMENTS ==========
 const authTitle = document.getElementById("authTitle");

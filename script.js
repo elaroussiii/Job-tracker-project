@@ -1,13 +1,12 @@
-// ========== CONFIGURATION ==========
-// TON URL MOCKAPI ICI
+// ==== CONFIGURATION ====
 const API_URL = "https://69428fb069b12460f311dc56.mockapi.io/applications";
 
-// ========== STATE ==========
+// ==== STATE ====
 let applications = [];
 let currentFilter = "all";
 let editingId = null;
 
-// ========== DOM ELEMENTS ==========
+// ==== DOM ELEMENTS ====
 const applicationsGrid = document.getElementById("applicationsGrid");
 const statusFilter = document.getElementById("statusFilter");
 const addApplicationBtn = document.getElementById("addApplicationBtn");
@@ -34,11 +33,8 @@ const statInterview = document.getElementById("statInterview");
 const statRejected = document.getElementById("statRejected");
 const statAccepted = document.getElementById("statAccepted");
 
-// ========== API FUNCTIONS ==========
+// ==== API FUNCTIONS ====
 
-/**
- * Fetch all applications from API
- */
 async function loadApplications() {
   try {
     showLoading(true);
@@ -58,9 +54,6 @@ async function loadApplications() {
   }
 }
 
-/**
- * Create a new application
- */
 async function createApplication(data) {
   try {
     showLoading(true);
@@ -88,9 +81,6 @@ async function createApplication(data) {
   }
 }
 
-/**
- * Update an existing application
- */
 async function updateApplication(id, data) {
   try {
     showLoading(true);
@@ -118,9 +108,6 @@ async function updateApplication(id, data) {
   }
 }
 
-/**
- * Delete an application
- */
 async function deleteApplication(id) {
   if (!confirm("Are you sure you want to delete this application?")) {
     return;
@@ -146,7 +133,7 @@ async function deleteApplication(id) {
   }
 }
 
-// ========== MODAL FUNCTIONS ==========
+// ==== MODAL FUNCTIONS ====
 
 function openModal(isEdit = false, app = null) {
   if (isEdit && app) {
@@ -177,7 +164,7 @@ function closeModal() {
   editingId = null;
 }
 
-// ========== RENDER FUNCTIONS ==========
+// ==== RENDER FUNCTIONS ====
 
 function renderApplications() {
   const list = applications.filter((app) => {
@@ -188,10 +175,10 @@ function renderApplications() {
 
   if (list.length === 0) {
     applicationsGrid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: white; font-size: 18px;">
-                📭 No applications found. Add your first one!
-            </div>
-        `;
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: white; font-size: 18px;">
+        📭 No applications found. Add your first one!
+      </div>
+    `;
     updateStats();
     return;
   }
@@ -211,65 +198,60 @@ function renderApplications() {
         : "status-accepted";
 
     card.innerHTML = `
-            <div class="card-header">
-                <div class="company-info">
-                    <h3>${escapeHtml(app.company)}</h3>
-                    <p class="position">${escapeHtml(app.position)}</p>
-                </div>
-                <span class="status-badge ${statusClass}">
-                    ${capitalize(app.status)}
-                </span>
-            </div>
-            <div class="card-body">
-                <div class="info-row">
-                    <span class="info-label">Contract Type</span>
-                    <span class="contract-badge">${escapeHtml(
-                      app.contractType
-                    )}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Applied Date</span>
-                    <span class="info-value">${formatDate(app.applyDate)}</span>
-                </div>
-                ${
-                  app.interviewDate
-                    ? `
-                <div class="info-row">
-                    <span class="info-label">Interview Date</span>
-                    <span class="info-value">${formatDate(
-                      app.interviewDate
-                    )}</span>
-                </div>`
-                    : ""
-                }
-                ${
-                  app.notes
-                    ? `
-                <div style="margin-top: 1rem; padding: 0.8rem; background: #f9fafb; border-radius: 8px; font-size: 13px; color: #555;">
-                    💬 ${escapeHtml(app.notes)}
-                </div>`
-                    : ""
-                }
-                ${
-                  app.offerLink
-                    ? `
-                <div style="margin-top: 0.8rem;">
-                    <a href="${escapeHtml(
-                      app.offerLink
-                    )}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 14px;">
-                        🔗 View Offer
-                    </a>
-                </div>`
-                    : ""
-                }
-            </div>
-            <div class="card-footer">
-                <button class="btn btn-edit">✏️ Edit</button>
-                <button class="btn btn-delete">🗑️ Delete</button>
-            </div>
-        `;
+      <div class="card-header">
+        <div class="company-info">
+          <h3>${escapeHtml(app.company)}</h3>
+          <p class="position">${escapeHtml(app.position)}</p>
+        </div>
+        <span class="status-badge ${statusClass}">
+          ${capitalize(app.status)}
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="info-label">Contract Type</span>
+          <span class="contract-badge">${escapeHtml(app.contractType)}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Applied Date</span>
+          <span class="info-value">${formatDate(app.applyDate)}</span>
+        </div>
+        ${
+          app.interviewDate
+            ? `
+        <div class="info-row">
+          <span class="info-label">Interview Date</span>
+          <span class="info-value">${formatDate(app.interviewDate)}</span>
+        </div>`
+            : ""
+        }
+        ${
+          app.notes
+            ? `
+        <div style="margin-top: 1rem; padding: 0.8rem; background: #f9fafb; border-radius: 8px; font-size: 13px; color: #555;">
+          💬 ${escapeHtml(app.notes)}
+        </div>`
+            : ""
+        }
+        ${
+          app.offerLink
+            ? `
+        <div style="margin-top: 0.8rem;">
+          <a href="${escapeHtml(
+            app.offerLink
+          )}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 14px;">
+            🔗 View Offer
+          </a>
+        </div>`
+            : ""
+        }
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-edit">✏️ Edit</button>
+        <button class="btn btn-delete">🗑️ Delete</button>
+      </div>
+    `;
 
-    // Attach events
     const editBtn = card.querySelector(".btn-edit");
     const deleteBtn = card.querySelector(".btn-delete");
 
@@ -295,7 +277,7 @@ function updateStats() {
   ).length;
 }
 
-// ========== UTILITY FUNCTIONS ==========
+// ==== UTILITY FUNCTIONS ====
 
 function showLoading(show) {
   if (show) {
@@ -328,13 +310,13 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// ========== EVENT LISTENERS ==========
+// ==== EVENT LISTENERS ====
 
 document.addEventListener("DOMContentLoaded", () => {
   // Set default apply date
   applyDateInput.value = new Date().toISOString().split("T")[0];
 
-  // 🔥 Load applications from API on page load
+  // Load applications from API on page load
   loadApplications();
 
   // Add application button
@@ -381,7 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userAvatar = document.querySelector(".user-avatar");
   if (userAvatar) {
     userAvatar.addEventListener("click", logout);
-    userAvatar.style.cursor = "pointer"; // Indique que c'est cliquable
+    userAvatar.style.cursor = "pointer";
   }
 });
 
@@ -389,5 +371,114 @@ document.addEventListener("DOMContentLoaded", () => {
 function logout() {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userEmail");
-  window.location.href = "auth.html"; // Redirige vers la page d'authentification
+  window.location.href = "auth.html";
+}
+
+// =====================
+// ADZUNA JOB SEARCH
+// =====================
+
+const searchWhatInput = document.getElementById("searchWhat");
+const searchWhereInput = document.getElementById("searchWhere");
+const searchContractInput = document.getElementById("searchContract");
+const searchJobsBtn = document.getElementById("searchJobsBtn");
+const jobResultsContainer = document.getElementById("jobResults");
+
+const JOB_SEARCH_API = "http://localhost:3001/api/jobs/search";
+
+function renderJobResults(jobs) {
+  jobResultsContainer.innerHTML = "";
+
+  if (!jobs || jobs.length === 0) {
+    jobResultsContainer.innerHTML =
+      '<div style="grid-column: 1/-1; color: white; padding: 1rem;">No jobs found.</div>';
+    return;
+  }
+
+  jobs.forEach((job) => {
+    const card = document.createElement("div");
+    card.className = "job-result-card";
+
+    const company = job.company?.display_name || "Unknown company";
+    const title = job.title || "No title";
+    const location = job.location?.display_name || "Unknown location";
+    const contract = job.contract_type || "";
+    const url = job.redirect_url || "#";
+
+    card.innerHTML = `
+      <div class="job-result-header">
+        <h4>${escapeHtml(title)}</h4>
+        <span class="job-company">${escapeHtml(company)}</span>
+      </div>
+      <div class="job-result-body">
+        <p class="job-location">📍 ${escapeHtml(location)}</p>
+        <p class="job-contract">📄 Contract: ${escapeHtml(
+          contract || "N/A"
+        )}</p>
+      </div>
+      <div class="job-result-footer">
+        <a href="${escapeHtml(
+          url
+        )}" target="_blank" class="btn-small">View Offer</a>
+        <button class="btn-small btn-import">Import to Tracker</button>
+      </div>
+    `;
+
+    const importBtn = card.querySelector(".btn-import");
+    importBtn.addEventListener("click", () => {
+      // Pré-remplir le formulaire d'application
+      companyInput.value = company;
+      positionInput.value = title;
+
+      // Mapping très simple pour contractType
+      if (contract === "intern" || contract === "internship") {
+        contractInput.value = "Internship";
+      } else if (contract === "permanent") {
+        contractInput.value = "CDI";
+      } else if (contract === "contract") {
+        contractInput.value = "CDD";
+      } else {
+        contractInput.value = "Freelance";
+      }
+
+      offerLinkInput.value = url;
+      statusInput.value = "sent";
+      applyDateInput.value = new Date().toISOString().split("T")[0];
+
+      openModal(false); // on ouvre le modal en mode "nouvelle candidature"
+    });
+
+    jobResultsContainer.appendChild(card);
+  });
+}
+
+async function searchJobs() {
+  const what = searchWhatInput.value.trim() || "developer";
+  const where = searchWhereInput.value.trim() || "Paris";
+  const contract = searchContractInput.value;
+
+  try {
+    jobResultsContainer.innerHTML =
+      '<div style="grid-column: 1/-1; color: white; padding: 1rem;">Loading jobs...</div>';
+
+    const params = new URLSearchParams({ what, where });
+    if (contract) params.append("contract", contract);
+
+    const response = await fetch(`${JOB_SEARCH_API}?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const jobs = data.results || [];
+    renderJobResults(jobs);
+  } catch (err) {
+    console.error("Error fetching jobs:", err);
+    jobResultsContainer.innerHTML =
+      '<div style="grid-column: 1/-1; color: red; padding: 1rem;">Error loading jobs.</div>';
+  }
+}
+
+if (searchJobsBtn) {
+  searchJobsBtn.addEventListener("click", searchJobs);
 }

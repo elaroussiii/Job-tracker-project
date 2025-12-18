@@ -7,26 +7,23 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <body>
     <script>
       // Vérifie si l'utilisateur est connecté
-      if (!localStorage.getItem('isLoggedIn')) {
-        window.location.href = 'auth.html'; // Redirige vers la page d'authentification
+      if (!localStorage.getItem("isLoggedIn")) {
+        window.location.href = "auth.html"; // Redirige vers la page d'authentification
       }
 
       // Optionnel: Récupère l'email de l'utilisateur pour l'afficher
-      document.addEventListener('DOMContentLoaded', () => {
-        const userAvatar = document.querySelector('.user-avatar');
-        const userEmail = localStorage.getItem('userEmail');
+      document.addEventListener("DOMContentLoaded", () => {
+        const userAvatar = document.querySelector(".user-avatar");
+        const userEmail = localStorage.getItem("userEmail");
         if (userAvatar && userEmail) {
           userAvatar.textContent = userEmail.charAt(0).toUpperCase(); // Affiche la première lettre de l'email
           userAvatar.title = userEmail; // Affiche l'email complet au survol
         }
       });
     </script>
-    <!-- Le reste de ton code HTML pour la navbar, le container, etc. -->
-    
-    
+
     <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="logo">
@@ -58,7 +55,41 @@
         </div>
       </div>
 
+      <!-- 🔍 Job Search Bar (Adzuna) -->
+      <div class="job-search-bar">
+        <h2>Search Jobs (Adzuna)</h2>
+        <div class="job-search-fields">
+          <input
+            type="text"
+            id="searchWhat"
+            placeholder="Job title (e.g. developer, data analyst)"
+          />
+          <input
+            type="text"
+            id="searchWhere"
+            placeholder="Location (e.g. Paris, Lyon)"
+          />
+          <select id="searchContract">
+            <option value="">Any contract</option>
+            <option value="permanent">Permanent</option>
+            <option value="contract">Contract</option>
+            <option value="part_time">Part-time</option>
+            <option value="internship">Internship</option>
+          </select>
+          <button id="searchJobsBtn" class="btn-search">Search Jobs</button>
+        </div>
+      </div>
+
+      <!-- Job Search Results -->
+      <div class="job-results-container">
+        <h3>Job Results</h3>
+        <div id="jobResults" class="job-results-grid">
+          <!-- Job offers from Adzuna will be rendered here -->
+        </div>
+      </div>
+
       <!-- Stats Grid -->
+
       <div class="stats-grid">
         <div class="stat-card stat-sent">
           <div class="stat-number" id="statSent">8</div>
@@ -146,8 +177,7 @@
               <label for="notesInput">Notes</label>
               <textarea
                 id="notesInput"
-                rows="4"
-                placeholder="Add any notes..."
+                placeholder="Notes, détails, suivi..."
               ></textarea>
             </div>
             <div class="form-actions">

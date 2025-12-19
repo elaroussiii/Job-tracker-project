@@ -1,11 +1,78 @@
 # Job Internship Tracker
 
- Description
+## Description
 
-Job Internship Tracker  est une application web permettant de suivre et gérer ses candidatures de stages et d’emplois.
-Elle offre un tableau de bord interactif pour organiser les candidatures, visualiser leur statut et rechercher des offres directement via l’API **Adzuna**.
+**Job Internship Tracker** est une application web full-stack conçue pour faciliter la gestion et le suivi des candidatures de stages et d’emplois.  
+Elle propose un tableau de bord interactif permettant d’organiser les candidatures, de visualiser leur statut, et de rechercher des offres d’emploi via l’API **Adzuna**.
 
-Le projet repose sur une architecture **Frontend / Backend** avec une base de données **MySQL**, et s’inscrit dans un cadre pédagogique et de montée en compétences full-stack.
+Ce projet s’inscrit dans un cadre pédagogique, visant à développer des compétences full-stack avec une architecture claire Frontend / Backend et une base de données MySQL.
+
+## Technologies utilisées
+
+### Frontend
+
+- HTML5, CSS3, JavaScript (Vanilla JS)
+- Gestion dynamique des formulaires et affichage interactif
+
+### Backend
+
+- Node.js avec Express.js
+- API RESTful pour la gestion des utilisateurs et candidatures
+
+### Base de données
+
+- MySQL (via XAMPP, port 3307)
+- Migration progressive de MockAPI vers MySQL
+
+### API externe
+
+- Adzuna Job Search API pour la recherche d’offres d’emploi
+
+---
+
+## Structure du projet
+
+job-internship-tracker/
+├── backend/
+│ ├── routes/
+│ │ ├── users.js
+│ │ └── applications.js
+│ ├── services/
+│ │ └── db.js
+│ ├── config.js
+│ ├── server.js
+│ ├── tableCreateUsers.js
+│ └── tableCreateApplications.js
+├── frontend/
+│ ├── index.html
+│ ├── auth.html
+│ ├── script.js
+│ ├── auth.js
+│ ├── style.css
+│ ├── auth.css
+│ └── pictures/
+└── README.md
+
+RouteLLM
+Routing to GPT-4.1 Mini
+Parfait, tu as déjà une bonne base ! Je vais te proposer une version plus professionnelle, claire, bien structurée et avec une mise en forme soignée, tout en gardant le contenu que tu as fourni.
+
+README Professionnel pour Job Internship Tracker
+markdown
+Copy
+
+# 🚀 Job Internship Tracker
+
+![License](https://img.shields.io/badge/license-Pedagogical-blue) ![Node.js](https://img.shields.io/badge/Node.js-v18-green) ![MySQL](https://img.shields.io/badge/MySQL-v8.0-blue)
+
+---
+
+## 📖 Description
+
+**Job Internship Tracker** est une application web full-stack conçue pour faciliter la gestion et le suivi des candidatures de stages et d’emplois.  
+Elle propose un tableau de bord interactif permettant d’organiser les candidatures, de visualiser leur statut, et de rechercher des offres d’emploi via l’API **Adzuna**.
+
+Ce projet s’inscrit dans un cadre pédagogique, visant à développer des compétences full-stack avec une architecture claire Frontend / Backend et une base de données MySQL.
 
 ---
 
@@ -13,168 +80,65 @@ Le projet repose sur une architecture **Frontend / Backend** avec une base de do
 
 ### Frontend
 
-* HTML5
-* CSS3
-* JavaScript (Vanilla JS)
+- HTML5, CSS3, JavaScript (Vanilla JS)
+- Gestion dynamique des formulaires et affichage interactif
 
 ### Backend
 
-* Node.js
-* Express.js
+- Node.js avec Express.js
+- API RESTful pour la gestion des utilisateurs et candidatures
 
 ### Base de données
 
-* MySQL (via XAMPP)
-* MockAPI (utilisée temporairement, en cours de migration vers MySQL)
+- MySQL (via XAMPP, port 3307)
+- Migration progressive de MockAPI vers MySQL
 
 ### API externe
 
-* Adzuna Job Search API
+- Adzuna Job Search API pour la recherche d’offres d’emploi
 
 ---
 
-## 🗂️ Architecture du projet
+## 📁 Structure du projet
 
-### 📁 Frontend (dossier racine)
+job-internship-tracker/
+├── backend/
+│ ├── routes/
+│ │ ├── users.js
+│ │ └── applications.js
+│ ├── services/
+│ │ └── db.js
+│ ├── config.js
+│ ├── server.js
+│ ├── tableCreateUsers.js
+│ └── tableCreateApplications.js
+├── frontend/
+│ ├── index.html
+│ ├── auth.html
+│ ├── script.js
+│ ├── auth.js
+│ ├── style.css
+│ ├── auth.css
+│ └── pictures/
+└── README.md
 
-* **index.html**
-  Tableau de bord principal :
+## Fonctionnalités principales
 
-  * Liste des candidatures
-  * Statistiques
-  * Formulaire d’ajout/édition dans un modal
-  * Barre de recherche d’offres (Adzuna)
+### Authentification
 
-* **auth.html**
-  Page d’authentification :
+- Inscription et connexion avec validation des champs
+- Gestion de session via `localStorage`
+- Protection des pages accessibles uniquement aux utilisateurs connectés
 
-  * Login / Sign Up
-  * Bascule dynamique entre les formulaires
+### Tableau de bord des candidatures
 
-* **script.js**
+- Ajout, modification et suppression des candidatures
+- Gestion des champs : entreprise, poste, type de contrat, statut, dates, lien vers l’offre, notes personnelles
+- Filtrage par statut
+- Statistiques automatiques par catégorie
 
-  * CRUD des candidatures via API backend / MockAPI
-  * Appels à l’API backend Adzuna (`/api/jobs/search`)
-  * Filtrage par statut
-  * Statistiques automatiques
-  * Gestion de la déconnexion
+### Recherche d’offres d’emploi
 
-* **auth.js**
-
-  * Logique de connexion et d’inscription
-  * Gestion de l’état utilisateur
-
-* **style.css**
-  Styles globaux (navbar, cartes, stats, modals, grid…)
-
-* **auth.css**
-  Styles spécifiques à la page d’authentification
-
-* **pictures/**
-  Logo et assets visuels
-
----
-
-### 📁 Backend (`backend/`)
-
-* **.env**
-  Variables d’environnement :
-
-  * Port du serveur
-  * Clés API Adzuna
-
-* **server.js**
-  Serveur Express principal avec :
-
-  * `GET /api/health` → test de santé du backend
-  * `GET /api/jobs/search` → proxy vers l’API Adzuna
-  * *(À venir)* routes `/api/users` et `/api/applications` connectées à MySQL
-
----
-
-## ⚙️ Fonctionnalités
-
- Authentification (Front-end)
-
-* Login et Sign Up avec bascule dynamique
-* Validation basique des champs
-* Sauvegarde de la session dans `localStorage`
-* Protection des pages (redirection si non connecté)
-
----
-
-### 📊 Tableau de bord des candidatures
-
-* Ajout, modification et suppression de candidatures
-* Champs gérés :
-
-  * Entreprise
-  * Poste
-  * Type de contrat
-  * Statut (sent / interview / rejected / accepted)
-  * Dates
-  * Lien vers l’offre
-  * Notes personnelles
-* Filtrage par statut
-* Statistiques automatiques par catégorie
-
----
-
-### 🔎 Recherche d’offres (Adzuna)
-
-* Recherche par :
-
-  * Mot-clé
-  * Localisation
-  * Type de contrat
-* Affichage des offres sous forme de cartes
-* Bouton **“Import to Tracker”** :
-
-  * Pré-remplit automatiquement le formulaire de candidature à partir d’une offre Adzuna
-
----
-
-## 🚀 Installation et lancement du projet
-
-### 1️⃣ Cloner le projet
-
-```bash
-git clone <url-du-repo>
-cd job-internship-tracker
-```
-
-### 2️⃣ Lancer le backend
-
-```bash
-cd backend
-npm install
-node server.js
-```
-
-### 3️⃣ Configurer l’environnement
-
-Créer un fichier `.env` dans le dossier `backend` :
-
-```
-PORT=3000
-ADZUNA_APP_ID=your_app_id
-ADZUNA_APP_KEY=your_app_key
-```
-
-### 4️⃣ Base de données
-
-* Lancer **XAMPP**
-* Activer **Apache** et **MySQL**
-* (Migration MockAPI → MySQL en cours)
-
-### 5️⃣ Lancer le frontend
-
-* Ouvrir `auth.html` ou `index.html` dans le navigateur
-  *(ou via Live Server)*
-
-
-
-
-## 📄 Licence
-
-Projet à usage pédagogique.
+- Recherche par mot-clé, localisation et type de contrat
+- Affichage des résultats sous forme de cartes
+- Import automatique des offres dans le tracker via un bouton dédié

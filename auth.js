@@ -146,3 +146,35 @@ document.addEventListener("DOMContentLoaded", () => {
   loginForm.addEventListener("submit", handleLogin);
   signupForm.addEventListener("submit", handleSignup);
 });
+
+// Fonction pour afficher la pop-up avec un message
+function showPopup(message) {
+  const modal = document.getElementById("popupModal");
+  const messageElem = document.getElementById("popupMessage");
+  const closeBtn = document.getElementById("popupCloseBtn");
+
+  messageElem.textContent = message;
+  modal.style.display = "flex";
+
+  // Focus sur le bouton pour accessibilité
+  closeBtn.focus();
+
+  // Fermer la modale au clic sur le bouton
+  closeBtn.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  // Fermer la modale si clic en dehors du contenu
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  // Fermer la modale avec la touche Échap
+  document.onkeydown = (e) => {
+    if (e.key === "Escape") {
+      modal.style.display = "none";
+    }
+  };
+}

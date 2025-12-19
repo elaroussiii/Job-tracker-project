@@ -1,9 +1,10 @@
 const config = {
   db: {
-    host: "localhost",
+    host: "127.0.0.1",
     user: "root",
-    password: "", // si tu as mis un mot de passe MySQL dans XAMPP, mets-le ici
+    password: "", // <-- si tu as un mot de passe, écris-le ici
     database: "job_tracker",
+    port: 3307,
   },
   listPerPage: 10,
 };

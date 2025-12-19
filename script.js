@@ -384,11 +384,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Déconnexion au clic sur l'avatar utilisateur
-  const userAvatar = document.querySelector(".user-avatar");
-  if (userAvatar) {
-    userAvatar.addEventListener("click", logout);
-    userAvatar.style.cursor = "pointer";
+  const logoutButton = document.getElementById("logout-button");
+  if (logoutButton) {
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      logoutButton.style.display = "inline-flex";
+    } else {
+      logoutButton.style.display = "none";
+    }
+
+    logoutButton.addEventListener("click", logout);
   }
 });
 
